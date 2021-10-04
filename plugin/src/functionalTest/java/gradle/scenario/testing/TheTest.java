@@ -6,14 +6,10 @@ import org.gradle.testkit.runner.TaskOutcome;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TheTest {
 
@@ -61,7 +57,11 @@ public class TheTest {
         assertEquals("Hi", readStringFrom(new File(underTestBuildDirectory, "build/the-file.txt")));
     }
 
-    private String readStringFrom(File file) throws IOException {
-        return Files.readString(file.toPath());
+    private String readStringFrom(File file) {
+        try {
+            return Files.readString(file.toPath());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }
